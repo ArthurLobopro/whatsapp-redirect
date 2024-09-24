@@ -2,6 +2,7 @@
     "manifest_version": 2,
     "name": "WhatsApp Web Redirect",
     "version": "1.0.0",
+    
     "description": "Redireciona links WhatsApp Web para o formato wa.me",
     "permissions": [
       "webRequest",
@@ -9,6 +10,9 @@
       "tabs",
       "https://web.whatsapp.com/*"
     ],
+    "icons": {
+        "48": "icon.png"
+    },
     "background": {
       "service_worker": "./dist/background.js"
     }
