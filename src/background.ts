@@ -5,12 +5,11 @@ chrome.webRequest.onBeforeRequest.addListener(
         if (url.includes("https://web.whatsapp.com/send?")) {
             const urlParams = new URLSearchParams(new URL(url).search)
             const phoneNumber = urlParams.get('phone')
-            const textMessage = urlParams.get('text')
+            const textMessage = urlParams.get('text')!
 
-            let newUrl = `https://wa.me/${phoneNumber}`
-            if (textMessage) {
-                newUrl += `?text=${encodeURIComponent(textMessage)}`
-            }
+            let newUrl = `whatsapp://send?text=${encodeURIComponent(textMessage)}&phone=${phoneNumber}`
+
+            openNew(newUrl)
 
             return { redirectUrl: newUrl }
         }
@@ -21,3 +20,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     { urls: ["https://web.whatsapp.com/*"] },
     ["blocking"]
 )
+
+function openNew(url) {
+    setTimeout(() => chrome.tabs.create({ url }), 2000)
+}
