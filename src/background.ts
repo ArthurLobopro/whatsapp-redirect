@@ -21,6 +21,6 @@ chrome.webRequest.onBeforeRequest.addListener(
     ["blocking"]
 )
 
-function openNew(url) {
+function openNew(url: string) {
     setTimeout(() => chrome.tabs.create({ url }), 2000)
 }
