@@ -1,0 +1,58 @@
+name: Build and Publish
+
+on:
+  workflow_dispatch: 
+    inputs:
+      version:
+        required: true
+        description: "Version name to build"
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    permissions: 
+      contents: write
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Setup Env
+        run: |
+          if [[ "${{github.ref_name}}" != ""]]; then
+            echo "VERSION=${{github.ref_name}}" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.version }}" != ""]]; then
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          else
+            echo "Error: Version not found"
+            exit 1
+          fi
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Compile ts
+        run: yarn tsc
+
+      - name: Build zip
+        run: zip "whatsapp-redirect-$VERSION.zip" build/* manifest.json icon.png
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+            files: |
+              *.crx
+              *.zip
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
