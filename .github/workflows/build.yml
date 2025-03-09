@@ -29,9 +29,9 @@ jobs:
 
       - name: Setup Env
         run: |
-          if [[ "${{ github.event.inputs.version }}" != ""]]; then
+          if [[ -n "${{ github.event.inputs.version }}" ]]; then
             echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
-          elif [[ "${{github.ref_name}}" != ""]]; then
+          elif [[ -n "${{github.ref_name}}" ]]; then
             echo "VERSION=${{github.ref_name}}" >> $GITHUB_ENV
           else
             echo "Error: Version not found"
