@@ -45,7 +45,7 @@ jobs:
         run: yarn tsc
 
       - name: Build zip
-        run: zip "whatsapp-redirect-$VERSION.zip" build/* manifest.json icon.png
+        run: zip "whatsapp-redirect-$VERSION.zip" dist/* manifest.json icon.png
 
       - name: Release
         uses: softprops/action-gh-release@v2
