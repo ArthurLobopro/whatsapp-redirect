@@ -1,15 +1,15 @@
 const DEFAULT_SETTINGS = {
+    active: true,
     openTwice: false
-}
+} as const
 
-const settings = { ...DEFAULT_SETTINGS }
+const settings: Partial<typeof DEFAULT_SETTINGS> = {}
 
 function reloadSettings() {
     chrome.storage.local.get().then(data => {
-        if ("openTwice" in data) {
-            settings.openTwice = data.openTwice
-        } else {
-            settings.openTwice = DEFAULT_SETTINGS.openTwice
+        for (const key in DEFAULT_SETTINGS) {
+            //@ts-ignore
+            settings[key] = data[key] ?? (DEFAULT_SETTINGS[key])
         }
 
         if (Object.keys(data).length !== Object.keys(settings).length) {
@@ -18,27 +18,32 @@ function reloadSettings() {
     })
 }
 
+reloadSettings()
+
 chrome.storage.local.onChanged.addListener(reloadSettings)
 
-
 chrome.webNavigation.onBeforeNavigate.addListener((details) => {
-    const url = new URL(details.url)
+    if (settings.active) {
+        const url = new URL(details.url)
 
-    if (url.href.includes("send?")) {
-        const urlParams = new URLSearchParams(new URL(url).search)
-        const phoneNumber = urlParams.get('phone')
-        const textMessage = urlParams.get('text')!
+        if (url.href.includes("send?") || url.href.includes("send/?")) {
+            const urlParams = new URLSearchParams(new URL(url).search)
+            const phone = urlParams.get('phone')
+            const message = urlParams.get('text')
 
-        let newUrl = `whatsapp://send?text=${encodeURIComponent(textMessage)}&phone=${phoneNumber}`
+            if (phone && message) {
+                let newUrl = `whatsapp://send?text=${encodeURIComponent(message)}&phone=${phone}`
 
-        chrome.tabs.update(details.tabId, { url: newUrl })
+                chrome.tabs.update(details.tabId, { url: newUrl })
 
-        if (settings.openTwice) {
-            openNew(newUrl)
+                if (settings.openTwice) {
+                    openNew(newUrl)
+                }
+            }
         }
     }
 
-}, { url: [{ hostContains: "web.whatsapp.com" }] })
+}, { url: [{ hostContains: "web.whatsapp.com" }, { hostContains: "api.whatsapp.com/" }] })
 
 
 function openNew(url: string) {
