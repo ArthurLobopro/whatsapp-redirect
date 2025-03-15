@@ -1,21 +1,23 @@
 {
-    "manifest_version": 3,
-    "name": "WhatsApp Web Redirect",
-    "version": "1.0.0",
-    
-    "description": "Redireciona links WhatsApp Web para o formato wa.me",
-    "permissions": [
-      "webNavigation",
-      "tabs"
-    ],
-    "host_permissions": [
-       "https://web.whatsapp.com/*"
-    ],
-    "icons": {
-        "48": "icon.png"
-    },
-    "background": {
-      "service_worker": "./dist/background.js"
-    }
+  "manifest_version": 3,
+  "name": "WhatsApp Web Redirect",
+  "version": "1.0.0",
+  "description": "Redireciona links WhatsApp Web para o formato wa.me",
+  "permissions": [
+    "webNavigation",
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://web.whatsapp.com/*"
+  ],
+  "icons": {
+    "48": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup/index.html"
+  },
+  "background": {
+    "service_worker": "./dist/background.js"
   }
-  
+}

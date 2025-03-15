@@ -1,3 +1,26 @@
+const DEFAULT_SETTINGS = {
+    openTwice: false
+}
+
+const settings = { ...DEFAULT_SETTINGS }
+
+function reloadSettings() {
+    chrome.storage.local.get().then(data => {
+        if ("openTwice" in data) {
+            settings.openTwice = data.openTwice
+        } else {
+            settings.openTwice = DEFAULT_SETTINGS.openTwice
+        }
+
+        if (Object.keys(data).length !== Object.keys(settings).length) {
+            chrome.storage.local.set(settings)
+        }
+    })
+}
+
+chrome.storage.local.onChanged.addListener(reloadSettings)
+
+
 chrome.webNavigation.onBeforeNavigate.addListener((details) => {
     const url = new URL(details.url)
 
@@ -8,9 +31,11 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 
         let newUrl = `whatsapp://send?text=${encodeURIComponent(textMessage)}&phone=${phoneNumber}`
 
-        openNew(newUrl)
-
         chrome.tabs.update(details.tabId, { url: newUrl })
+
+        if (settings.openTwice) {
+            openNew(newUrl)
+        }
     }
 
 }, { url: [{ hostContains: "web.whatsapp.com" }] })
