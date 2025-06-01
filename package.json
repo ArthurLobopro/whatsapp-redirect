@@ -1,5 +1,21 @@
 {
-  "dependencies": {},
+  "name": "whatsapp-redirect",
+  "version": "1.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArthurLobopro/whatsapp-redirect.git"
+  },
+  "keywords": [],
+  "author": "Arthur Lobo",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ArthurLobopro/whatsapp-redirect/issues"
+  },
+  "homepage": "https://github.com/ArthurLobopro/whatsapp-redirect#readme",
   "devDependencies": {
     "@types/chrome": "^0.0.308",
     "typescript": "^5.8.2"
