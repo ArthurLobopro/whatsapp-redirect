@@ -43,7 +43,7 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
         }
     }
 
-}, { url: [{ hostContains: "web.whatsapp.com" }, { hostContains: "api.whatsapp.com/" }] })
+}, { url: [{ hostContains: ".whatsapp.com" }] })
 
 
 function openNew(url: string) {

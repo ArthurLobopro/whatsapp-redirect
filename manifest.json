@@ -10,7 +10,7 @@
   ],
   "host_permissions": [
     "https://web.whatsapp.com/*",
-    "https://api.whatsapp.com/"
+    "https://api.whatsapp.com/*"
   ],
   "icons": {
     "48": "icon.png"
